@@ -1,0 +1,38 @@
+groups:
+- name: network
+  rules:
+  - alert: GPUTemperature
+    expr: DCGM_FI_DEV_GPU_TEMP > 80
+    for: 30s
+    labels:
+      severity: warning
+    annotations:
+      summary: High temperature on GPU {{ $labels.modelName }} (instance {{ $labels.instance }}; device {{ $labels.device}})
+      description: "High temperature on GPU {{ $labels.modelName }}\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
+
+  - alert: HostUnusualNetworkThroughputIn
+    expr: sum by (instance) (rate(node_network_receive_bytes_total[30s])) / 1000 / 1000 > 1000
+    for: 30s
+    labels:
+      severity: warning
+    annotations:
+      summary: Host unusual network throughput in (instance {{ $labels.instance }})
+      description: "Host network interfaces are probably receiving too much data (> 1000 MB/s)\n  VALUE = {{ $value }}\n"
+
+  - alert: CPUHighLoad
+    expr: 100 - (avg by (instance) (irate(node_cpu_seconds_total{job="node-exporter",mode="idle"}[30s])) * 100) > 80
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: CPU high load (instance {{ $labels.instance }})
+      description: "CPU high load on {{ $labels.instance }}: {{ $value }}%"
+
+  - alert: LowDiskSpace
+    expr: 1 - node_filesystem_free_bytes{mountpoint="/u01"} / node_filesystem_size_bytes{mountpoint="/u01"} > 0.8
+    for: 1m
+    labels:
+      severity: warning
+    annotations:
+      summary: Low disk space on (instance {{ $labels.instance }}, device {{$labels.device}}, mountpoint {{$labels.mountpoint}})
+      description: Total used space takes up to {{$value}}% 

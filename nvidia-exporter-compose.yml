@@ -1,0 +1,7 @@
+version: '3.1'
+services:
+  nvidia_gpu_exporter:
+    image: utkuozdemir/nvidia_gpu_exporter:0.3.0
+    ports:
+      - 9835:9835
+    restart: always
