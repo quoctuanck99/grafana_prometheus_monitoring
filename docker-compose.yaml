@@ -9,7 +9,7 @@ services:
       - ./grafana.ini:/etc/grafana/grafana.ini
     env_file:
       - ./config.env
-    restart: always
+    restart: unless-stopped
 
   prometheus:
     image: prom/prometheus
@@ -24,7 +24,7 @@ services:
       - 9090:9090
     links:
       - alertmanager:alertmanager
-    restart: always
+    restart: unless-stopped
 
   alertmanager:
     image: prom/alertmanager
@@ -32,7 +32,7 @@ services:
       - 9093:9093
     volumes:
       - ./alertmanager/:/etc/alertmanager/
-    restart: always
+    restart: unless-stopped
     command:
       - '--config.file=/etc/alertmanager/config.yml'
       - '--storage.path=/alertmanager'
@@ -43,4 +43,4 @@ services:
       - PROM2TEAMS_CONNECTOR=https://vingroupjsc.webhook.office.com/webhookb2/608e7d88-953e-4b92-993a-4868e12e9f9c@ed6a2939-d153-4f92-94f8-3d790d96c9f8/IncomingWebhook/aea56a1ef7764fe08d19ad8e54f73ea8/d00189c6-110a-4646-b08a-d17483facab3
     ports:
       - 8089:8089
-    restart: always
+    restart: unless-stopped
