@@ -1,0 +1,23 @@
+version: '3.9'
+services:
+  timescaledb:
+    image: timescaledev/promscale-extension:latest-ts2-pg13
+    ports:
+      - 5432:5432
+    networks:
+      - promscale-timescaledb
+    environment:
+      - POSTGRES_PASSWORD=123456aA@
+      
+  promescale:
+    image: timescale/promscale:latest
+    ports:
+      - 9201:9201
+    networks:
+      - promscale-timescaledb
+    depends_on:
+      - timescaledb
+    environment:
+      PROMSCALE_DB_URI: postgres://postgres:123456aA@@timescaledb:5432/postgres?sslmode=allow
+networks:
+  promscale-timescaledb:
