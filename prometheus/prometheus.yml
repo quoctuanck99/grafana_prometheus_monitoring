@@ -19,14 +19,14 @@ scrape_configs:
   - job_name: 'dcgm-exporter'
     scrape_interval: 5s
     static_configs:
-      - targets: ['10.124.64.125:9400']
-      
+      - targets: ['10.124.69.121:9400']
+
   - job_name: 'nvidia-gpu'
     scrape_interval: 5s
     static_configs:
-      - targets: ['10.124.64.125:9835']
+      - targets: ['10.124.69.121:9835']
 
   - job_name: 'node-exporter'
     scrape_interval: 5s
     static_configs:
-      - targets: ['10.124.64.125:9100']
+      - targets: ['10.124.69.121:9100']
